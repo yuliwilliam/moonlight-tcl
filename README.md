@@ -40,7 +40,7 @@ moonlight-stream/moonlight-common-c         official, 874ac95
 | Commit | Change |
 |---|---|
 | `a2430b92` | The in-app browser for the Sunshine/Apollo web UI (`HelpActivity`) accepted **any** certificate whose host matched the PC, so anyone on the LAN able to intercept traffic could capture the admin login typed into it. It now cancels every certificate error; open the web UI from the PC's own browser. The submodule URL points at yuliwilliam/moonlight-common-c. |
-| (next commit) | `moonlight-tcl://` app links, so something outside the TV can open the app or start a stream — see below. |
+| `e11a5adb` | `moonlight-tcl://` app links, so something outside the TV can open the app or start a stream — see below. |
 
 ### App links (`moonlight-tcl://`)
 
