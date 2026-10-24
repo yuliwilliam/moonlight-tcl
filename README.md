@@ -1,3 +1,94 @@
+> **About this fork (yuliwilliam/moonlight-tcl)**
+>
+> A personal fork of [pabragin/moonlight-tcl](https://github.com/pabragin/moonlight-tcl), built from source and
+> sideloaded instead of installing the author's APK. Everything below this box is the original author's README.
+> See [Lineage](#lineage-and-porting-changes) for where each layer of the code comes from.
+
+## Lineage and porting changes
+
+Four layers, each a fork of the one above. The commits are where each layer branched off, so a change in any
+source can be compared and ported on its own.
+
+```
+moonlight-stream/moonlight-android          official Moonlight (Cameron Gutman)
+  │  branched at 27ded2ad (2024-11-14, "Translated using Weblate (Spanish)")
+  ▼
+ClassicOldSong/moonlight-android            Artemis, branch moonlight-noir (Yukino Song)
+  │  branched at 3397ec77 (2025-10-18, "Merge pull request #412 … zh-rTW translations")
+  ▼
+pabragin/moonlight-tcl                      Moonlight TCL (Pavel Bragin), 89 commits on top of 3397ec77
+  │  forked at e9ac56ad (2026-10-14, v30.1.5 + README)
+  ▼
+yuliwilliam/moonlight-tcl                   this fork
+```
+
+pabragin/moonlight-tcl was pushed as a new repository, not with GitHub's Fork button, so GitHub only shows the
+last link; the full history above is still in git.
+
+The native submodule `app/src/main/jni/moonlight-core/moonlight-common-c` has its own lineage:
+
+```
+moonlight-stream/moonlight-common-c         official, 874ac95
+  + 2 Artemis commits (Yukino Song)         9f88c11 server commands over the control stream, d1de64f empty payload
+  + 3 upstream fixes cherry-picked          8dd586e, 094ddc0, 93bba92 (RFI / IDR loss handling)
+  → pabragin/moonlight-common-c @ 93bba92
+  → yuliwilliam/moonlight-common-c          fork, so builds don't depend on the author's repository
+```
+
+### What this fork changes
+
+| Commit | Change |
+|---|---|
+| `a2430b92` | The in-app browser for the Sunshine/Apollo web UI (`HelpActivity`) accepted **any** certificate whose host matched the PC, so anyone on the LAN able to intercept traffic could capture the admin login typed into it. It now cancels every certificate error; open the web UI from the PC's own browser. The submodule URL points at yuliwilliam/moonlight-common-c. |
+
+### Remotes
+
+```bash
+git clone --recurse-submodules https://github.com/yuliwilliam/moonlight-tcl.git
+cd moonlight-tcl
+git remote add pabragin https://github.com/pabragin/moonlight-tcl.git
+git remote add artemis https://github.com/ClassicOldSong/moonlight-android.git
+git remote add upstream https://github.com/moonlight-stream/moonlight-android.git
+git fetch --all
+```
+
+For the submodule (run inside `app/src/main/jni/moonlight-core/moonlight-common-c`):
+
+```bash
+git remote add pabragin https://github.com/pabragin/moonlight-common-c.git
+git remote add artemis https://github.com/ClassicOldSong/moonlight-common-c.git
+git remote add upstream https://github.com/moonlight-stream/moonlight-common-c.git
+git fetch --all
+```
+
+### Porting from each source
+
+The code has never been reviewed by anyone but its author, and a paired client can control the PC's desktop, so
+**read every incoming commit before it lands here**; never install a prebuilt APK from any of these sources.
+
+- **pabragin (Moonlight TCL)** — new commits since our fork point: `git log --oneline e9ac56ad..pabragin/main`.
+  These apply cleanly as a merge or cherry-picks; after merging, move the fork point in the diagram above.
+- **Artemis (moonlight-noir)** — commits Moonlight TCL doesn't have yet:
+  `git log --oneline 3397ec77..artemis/moonlight-noir`. Moonlight TCL rewrote large parts (Game, PcView/AppView,
+  settings, input, the decoder renderer, removed keyboard/virtual-controller UIs), so cherry-pick selectively and
+  expect conflicts.
+- **Official Moonlight** — commits neither Artemis nor Moonlight TCL has:
+  `git log --oneline upstream/master ^artemis/moonlight-noir ^HEAD`. Decoder and streaming fixes are the ones
+  worth carrying; the official tree is the furthest from this one.
+- **moonlight-common-c** — compare against each source the same way (`git log --oneline HEAD..upstream/master`,
+  `HEAD..artemis/<branch>`, `HEAD..pabragin/<branch>`), commit inside the submodule, push it to
+  yuliwilliam/moonlight-common-c, then commit the new submodule pointer here.
+
+### Building and signing
+
+JDK 17, Android SDK platform 36, build-tools 36.0.0 and NDK 27.3.13750724 (`ndkVersion` in `app/build.gradle`).
+`./gradlew assembleRelease` gives `app/build/outputs/apk/release/app-release-unsigned.apk`; `zipalign -p 4` it and
+sign with `apksigner`. The release build has no signing config in this repository. Keep using the same keystore
+for every build, or the TV will refuse to update the installed app and it has to be uninstalled and re-paired.
+Use the release build: the debug build exports `DebugInfoActivity`.
+
+---
+
 <p align="center"><img src="store-assets/moonlight-tcl-icon.svg" width="160" alt="Moonlight TCL"></p>
 
 <h1 align="center">Moonlight TCL</h1>
