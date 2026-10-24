@@ -79,6 +79,45 @@ The code has never been reviewed by anyone but its author, and a paired client c
   `HEAD..artemis/<branch>`, `HEAD..pabragin/<branch>`), commit inside the submodule, push it to
   yuliwilliam/moonlight-common-c, then commit the new submodule pointer here.
 
+### Review log
+
+**2026-10-24 — security review of pabragin's code (3397ec77..e9ac56ad, 89 commits).** Focused on what a malicious
+or careless client could do, not on code quality; the large UI/input rewrites were covered by targeted searches
+plus reading around every hit, not line by line.
+
+- No telemetry, analytics, update checks or other background network traffic. The only external URLs open when
+  tapped: the project's GitHub releases page, an Obtainium link, three moonlight-docs wiki pages.
+- Pairing and TLS to the PC are unchanged from Artemis: `NvHTTP` certificate pinning and hostname verification
+  are byte-identical (OkHttp was replaced by `HttpsURLConnection`, no proxy, no redirects). The client key and
+  certificate (RSA-2048, `SecureRandom` serial) stay in the app's private files and are never sent anywhere.
+- Gradle scripts run no commands; dependencies were removed (BouncyCastle, OkHttp, jmDNS, Gson, AndroidX,
+  Material, LiteRT, OpenCV, …) and the only addition is `org.lsposed.hiddenapibypass:6.1`, used for Bluetooth
+  gamepad rumble, which only talks to the `BluetoothDevice` behind a gamepad `InputDevice`.
+- New permissions: `RECORD_AUDIO` (dictation through the system speech recognizer, asked on first use),
+  `BLUETOOTH_CONNECT` / `BLUETOOTH` (rumble). The debug build exports `DebugInfoActivity`; the release build
+  exports nothing new.
+- Prebuilt native libraries: `libopus.a` is byte-identical to upstream moonlight-android 31b70030;
+  `openssl/armeabi-v7a/libcrypto.a` (OpenSSL 1.1.1w) is built by the author and can't be reproduced byte for
+  byte — its symbols and strings show no network, DNS or `dlopen` use. No other `.so`, `.jar`, `.aar` or `.dex`.
+- No dynamic code loading, `Runtime.exec`, obfuscated strings or base64 blobs. The submodule change is upstream
+  874ac95 plus Artemis's two control-stream commits plus three upstream RFI fixes (74 lines).
+- **One problem, fixed here in `a2430b92`:** the in-app server web UI accepted any certificate for the PC's host,
+  so a LAN attacker could capture the Sunshine admin login typed into it.
+
+**2026-10-24 — what to port from each source.**
+
+| Source | Not yet here | Decision |
+|---|---|---|
+| pabragin/moonlight-tcl | 0 | Up to date at e9ac56ad. |
+| Artemis moonlight-noir | 4 (278a4020, 082703e4, c4be306b, merge c5cf27f4) | **Skip:** right-Alt copy/paste mapping for macOS hosts, in the keyboard code Moonlight TCL rewrote. |
+| Official moonlight-android | 29 besides translations | **Skip.** The useful ones are already ported by pabragin and marked `upstream <hash>` in code or commit messages: 280454fd Xbox Series S/X, 583f662a 8BitDo, 68adf9ec H.264 SPS on Oreo+, b9c5eddd shift for `+`, c2e224eb SDL joystick sync, libopus from 31b70030, plus equivalent changes for abde6021 (controller LED crashes) and 3c6a0d12 (rumble API). The rest update libraries Moonlight TCL removed (OkHttp, jmDNS, BouncyCastle, AGP 9, NDK r29, desugaring), add Android 15–17-only features (6d4c64a5 producer throttling needs API 37, ddb674a9 Android 16.1 keyboard capture, 8974dcda new keycodes), or are CI, lint and release housekeeping. Revisit only if the minimum Android version changes. |
+| Artemis moonlight-common-c | 6 | Skip: the two content commits are already here; the rest are merges of upstream. |
+| **Official moonlight-common-c** | 15 | **Port 12** (3 RFI fixes are already here): 970b072 use-after-free of queued controller packets, e2722dc uninitialized stack data in the ping payload, 5ec8397 memory leak on duplicate RTSP options, aeba988 RTSP parser rework, 342b106 in-place control-stream encryption, 448b2c6 / 421bd74 / f1cca2d mouse and pen batching fixes, 4a95eb3 / 0405384 UTF-8 text on the keyboard channel, f900dd4 `MODIFIER_EXTENDED`, 5a26329 license exception text. The public API only gains `MODIFIER_EXTENDED`. One conflict in `Limelight-internal.h`: keep Artemis's `CTRL_CHANNEL_SERVERCTL`, drop `CTRL_CHANNEL_UTF8` as upstream does. |
+
+The 12 moonlight-common-c commits are cherry-picked with `-x` on the submodule's local `yuliwilliam` branch and
+build cleanly; they land here (pushed to yuliwilliam/moonlight-common-c, submodule pointer bumped) after a play
+session on the TV confirms nothing regressed.
+
 ### Building and signing
 
 JDK 17, Android SDK platform 36, build-tools 36.0.0 and NDK 27.3.13750724 (`ndkVersion` in `app/build.gradle`).
