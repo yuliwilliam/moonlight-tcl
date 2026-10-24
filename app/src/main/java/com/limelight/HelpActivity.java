@@ -91,19 +91,14 @@ public class HelpActivity extends Activity {
                 }
             }
 
-            // Sunshine and Apollo serve their web UI with a self-signed certificate: accept it for the PC we
-            // were sent to, never for anything else
+            // Local build: never accept certificate errors. Upstream accepted any certificate whose host matched the
+            // PC, so anyone on the LAN able to intercept traffic could phish the Sunshine admin login typed here; open
+            // the Sunshine web UI from the PC's own browser instead.
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                String host = Uri.parse(error.getUrl()).getHost();
-                if (trustedHost != null && trustedHost.equals(host)) {
-                    handler.proceed();
-                }
-                else {
-                    handler.cancel();
-                    dismissLoading();
-                    Toast.makeText(HelpActivity.this, R.string.help_ssl_error, Toast.LENGTH_LONG).show();
-                }
+                handler.cancel();
+                dismissLoading();
+                Toast.makeText(HelpActivity.this, R.string.help_ssl_error, Toast.LENGTH_LONG).show();
             }
 
             // The web UI asks for its username and password with HTTP basic auth
