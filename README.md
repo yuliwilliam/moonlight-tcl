@@ -40,6 +40,31 @@ moonlight-stream/moonlight-common-c         official, 874ac95
 | Commit | Change |
 |---|---|
 | `a2430b92` | The in-app browser for the Sunshine/Apollo web UI (`HelpActivity`) accepted **any** certificate whose host matched the PC, so anyone on the LAN able to intercept traffic could capture the admin login typed into it. It now cancels every certificate error; open the web UI from the PC's own browser. The submodule URL points at yuliwilliam/moonlight-common-c. |
+| (next commit) | `moonlight-tcl://` app links, so something outside the TV can open the app or start a stream — see below. |
+
+### App links (`moonlight-tcl://`)
+
+Android TV's remote protocol launches apps by sending a link that the TV opens with `ACTION_VIEW`, so an app can
+only be started this way if it registers a link. Two are added:
+
+| Link | Does |
+|---|---|
+| `moonlight-tcl://open` | Opens Moonlight TCL (the PC list). |
+| `moonlight-tcl://stream?host=<PC name>&app=<app name>` | Starts streaming that app. `host` must match the PC name exactly; `app` is case-insensitive. `uuid=<PC uuid>` and `appid=<app id>` work instead of the names. |
+
+For example, from Home Assistant's Android TV Remote integration:
+
+```yaml
+action: remote.turn_on
+target:
+  entity_id: remote.living_room_tv
+data:
+  activity: moonlight-tcl://stream?host=windows&app=Desktop
+```
+
+The intent filters are not `BROWSABLE`, so a web page in a browser on the TV can't fire them; anything that can
+already start activities on the TV (the remote service, `adb`) can. `stream` goes through `ShortcutTrampoline`, the
+same path launcher shortcuts and `.art` files use, so it shows the same errors if the PC or app isn't found.
 
 ### Remotes
 
