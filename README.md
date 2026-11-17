@@ -17,7 +17,7 @@ ClassicOldSong/moonlight-android            Artemis, branch moonlight-noir (Yuki
   │  branched at 3397ec77 (2025-10-18, "Merge pull request #412 … zh-rTW translations")
   ▼
 pabragin/moonlight-tcl                      Moonlight TCL (Pavel Bragin), 89 commits on top of 3397ec77
-  │  forked at e9ac56ad (2026-10-14, v30.1.5 + README)
+  │  forked at e9ac56ad (2026-10-14, v30.1.5 + README); merged up to 6f6d937b (2026-11-11, 30.1.9) in 816ed16a
   ▼
 yuliwilliam/moonlight-tcl                   this fork
 ```
@@ -31,16 +31,17 @@ The native submodule `app/src/main/jni/moonlight-core/moonlight-common-c` has it
 moonlight-stream/moonlight-common-c         official, 874ac95
   + 2 Artemis commits (Yukino Song)         9f88c11 server commands over the control stream, d1de64f empty payload
   + 3 upstream fixes cherry-picked          8dd586e, 094ddc0, 93bba92 (RFI / IDR loss handling)
-  → pabragin/moonlight-common-c @ 93bba92
-  → yuliwilliam/moonlight-common-c          fork, so builds don't depend on the author's repository
+  → pabragin/moonlight-common-c @ 93bba92, later c6a41dd (official fixes up to e80a786, each line-identical)
+  → yuliwilliam/moonlight-common-c          fork, so builds don't depend on the author's repository;
+                                            branch yuliwilliam merges pabragin's (28f6e16 = c6a41dd's tree)
 ```
 
 ### What this fork changes
 
 | Commit | Change |
 |---|---|
-| `a2430b92` | The in-app browser for the Sunshine/Apollo web UI (`HelpActivity`) accepted **any** certificate whose host matched the PC, so anyone on the LAN able to intercept traffic could capture the admin login typed into it. It now cancels every certificate error; open the web UI from the PC's own browser. The submodule URL points at yuliwilliam/moonlight-common-c. |
-| `e11a5adb` | `moonlight-tcl://` app links, so something outside the TV can open the app or start a stream — see below. |
+| `a2430b92`, `aa35c455` | The in-app browser for the Sunshine/Apollo web UI (`HelpActivity`) accepted **any** certificate whose host matched the PC, so anyone on the LAN able to intercept traffic could capture the admin login typed into it. pabragin later pinned it to the paired certificate (dad839ba, merged) but still accepts any certificate for an unpaired PC; `aa35c455` refuses that case. |
+| `e11a5adb` | `moonlight-tcl://` app links, so something outside the TV can open the app or start a stream — see below. pabragin added the same links in f07ebf36, so this is now upstream too. |
 | `6daa3a20` | Runs on **Android 12 and later** (minSdk 31) instead of Android 14 only, for the TCL S551G (Realtek, Android 12): newer APIs are behind version checks again and mDNS uses jmDNS before Android 14, as in Artemis. The original README below still says Android 14 only. |
 
 ### App links (`moonlight-tcl://`)
@@ -92,8 +93,15 @@ git fetch --all
 The code has never been reviewed by anyone but its author, and a paired client can control the PC's desktop, so
 **read every incoming commit before it lands here**; never install a prebuilt APK from any of these sources.
 
-- **pabragin (Moonlight TCL)** — new commits since our fork point: `git log --oneline e9ac56ad..pabragin/main`.
-  These apply cleanly as a merge or cherry-picks; after merging, move the fork point in the diagram above.
+- **pabragin (Moonlight TCL)** — new commits since the last merge: `git log --oneline HEAD..pabragin/main`.
+  **Always take them with a real merge** (`git merge --no-ff pabragin/main`), never cherry-picks, so git knows
+  what is already here and the next merge only shows new commits. Review first, resolve conflicts in the merge
+  commit and list each resolution in its message; anything we change beyond resolving goes into its own commit
+  after the merge. Then update the diagram above and add a review-log entry.
+- **pabragin's moonlight-common-c** — same rule inside the submodule: merge his branch into `yuliwilliam`
+  (`git merge --no-ff pabragin/<branch>`), check each of his commits against the official patch
+  (`git cherry -v upstream/master pabragin/<branch> <last merged>`), push, then commit the submodule pointer
+  here as part of the app merge.
 - **Artemis (moonlight-noir)** — commits Moonlight TCL doesn't have yet:
   `git log --oneline 3397ec77..artemis/moonlight-noir`. Moonlight TCL rewrote large parts (Game, PcView/AppView,
   settings, input, the decoder renderer, removed keyboard/virtual-controller UIs), so cherry-pick selectively and
@@ -129,6 +137,21 @@ plus reading around every hit, not line by line.
   874ac95 plus Artemis's two control-stream commits plus three upstream RFI fixes (74 lines).
 - **One problem, fixed here in `a2430b92`:** the in-app server web UI accepted any certificate for the PC's host,
   so a LAN attacker could capture the Sunshine admin login typed into it.
+
+**2026-11-16 — merge of pabragin 30.1.9 (e9ac56ad..6f6d937b, 25 commits) and his moonlight-common-c c6a41dd.**
+
+- App code: about 290 lines outside translations, README and store metadata. No new network access,
+  permissions, dependencies or dynamic code. The only new data sent to the PC is the TV's device name
+  (`Settings.Global.DEVICE_NAME`) when pairing (9c38533b). `.github/FUNDING.yml` adds a Sponsor button for
+  pabragin; kept.
+- moonlight-common-c: his 26 commits since 93bba92 are official commits (each line-identical to the official
+  patch) plus the two Artemis commits already here. Merged into `yuliwilliam`; the tree equals c6a41dd.
+- Overlaps with this fork: the `moonlight-tcl://` links (f07ebf36 = our e11a5adb) and the web UI certificate
+  check (dad839ba replaces our a2430b92; `aa35c455` keeps unpaired PCs refused).
+- Not taken: official moonlight-common-c after e80a786 (40 commits, 2026-11-10..13: atomics and race fixes,
+  frame reassembly bounds, PKCS7 padding, empty audio packets, IPv6 subnet mask, intra refresh). Several change
+  the API (`LiPeekNextVideoFrame` removed, RTP stats redesigned), and official moonlight-android hasn't moved to
+  them yet; take them when it does. Official moonlight-android and Artemis: nothing new since 2026-10-24.
 
 **2026-10-24 — what to port from each source.**
 
