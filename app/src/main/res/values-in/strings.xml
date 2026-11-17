@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">Sensor: </string>
     <string name="debug_info_no_relevant_driver">Tidak ada (tidak ada driver yang sesuai atau gamepad tidak didukung)</string>
     <string name="debug_info_vibration">Getaran: </string>
+    <string name="debug_info_bt_hid_supported">Didukung melalui Bluetooth HID (%1$s)</string>
+    <string name="debug_info_android_details">Detail dari Android (mungkin tidak mencakup getaran Bluetooth HID): </string>
     <string name="debug_info_supported">Didukung</string>
     <string name="debug_info_not_supported">Tidak didukung</string>
     <string name="debug_info_details">Detail: </string>
@@ -391,4 +393,8 @@
     <string name="save">Simpan</string>
     <string name="export_launcher_computer_details_incomplete">Tidak dapat mengekspor: detail komputer tidak lengkap.</string>
     <string name="export_launcher_app_details_incomplete">Tidak dapat mengekspor: detail aplikasi tidak lengkap.</string>
+    <string name="help_ssl_error">Sertifikat situs ini tidak tepercaya</string>
+    <string name="help_auth_username">Nama pengguna</string>
+    <string name="help_auth_password">Kata sandi</string>
+    <string name="help_auth_title">Masuk ke %1$s</string>
 </resources>

@@ -26,14 +26,21 @@ import android.app.Activity;
 
 import com.limelight.utils.SpinnerDialog;
 
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.X509Certificate;
+import java.util.Arrays;
+
 public class HelpActivity extends Activity {
     /** Boolean extra: the page belongs to the user's own PC, so its self-signed certificate is accepted. */
     public static final String EXTRA_TRUST_HOST = "trustHost";
+    /** DER bytes of the certificate the PC presented when it was paired; the web UI must present the same one. */
+    public static final String EXTRA_SERVER_CERT = "serverCert";
 
 
     private SpinnerDialog loadingDialog;
     private WebView webView;
     private String trustedHost;
+    private byte[] trustedCert;
 
     private boolean backCallbackRegistered;
     private OnBackInvokedCallback onBackInvokedCallback;
@@ -66,6 +73,7 @@ public class HelpActivity extends Activity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
         trustedHost = getIntent().getBooleanExtra(EXTRA_TRUST_HOST, false) ? getIntent().getData().getHost() : null;
+        trustedCert = getIntent().getByteArrayExtra(EXTRA_SERVER_CERT);
 
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -93,14 +101,20 @@ public class HelpActivity extends Activity {
                 }
             }
 
-            // Local build: never accept certificate errors. Upstream accepted any certificate whose host matched the
-            // PC, so anyone on the LAN able to intercept traffic could phish the Sunshine admin login typed here; open
-            // the Sunshine web UI from the PC's own browser instead.
+            // Sunshine and Apollo serve their web UI with the same self-signed certificate they pair with:
+            // accept exactly that certificate for the PC we were sent to. A PC that isn't paired yet has no
+            // certificate on record, so there the host alone decides (the web UI is where its PIN is typed).
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
-                handler.cancel();
-                dismissLoading();
-                Toast.makeText(HelpActivity.this, R.string.help_ssl_error, Toast.LENGTH_LONG).show();
+                String host = Uri.parse(error.getUrl()).getHost();
+                if (trustedHost != null && trustedHost.equals(host) && isPairedCertificate(error)) {
+                    handler.proceed();
+                }
+                else {
+                    handler.cancel();
+                    dismissLoading();
+                    Toast.makeText(HelpActivity.this, R.string.help_ssl_error, Toast.LENGTH_LONG).show();
+                }
             }
 
             // The web UI asks for its username and password with HTTP basic auth
@@ -136,6 +150,18 @@ public class HelpActivity extends Activity {
         });
 
         webView.loadUrl(getIntent().getData().toString());
+    }
+
+    private boolean isPairedCertificate(SslError error) {
+        if (trustedCert == null) {
+            return true;
+        }
+        X509Certificate cert = error.getCertificate().getX509Certificate();
+        try {
+            return cert != null && Arrays.equals(cert.getEncoded(), trustedCert);
+        } catch (CertificateEncodingException e) {
+            return false;
+        }
     }
 
     private void dismissLoading() {

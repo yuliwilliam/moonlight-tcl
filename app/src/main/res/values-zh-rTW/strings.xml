@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">感測器：</string>
     <string name="debug_info_no_relevant_driver">無（沒有相關驅動程式，或手把不受支援）</string>
     <string name="debug_info_vibration">震動：</string>
+    <string name="debug_info_bt_hid_supported">透過 Bluetooth HID 支援 (%1$s)</string>
+    <string name="debug_info_android_details">Android 回報的詳細資訊（可能未包含 Bluetooth HID 震動）：</string>
     <string name="debug_info_supported">支援</string>
     <string name="debug_info_not_supported">不支援</string>
     <string name="debug_info_details">詳細資訊：</string>
@@ -391,4 +393,8 @@
     <string name="save">儲存</string>
     <string name="export_launcher_computer_details_incomplete">無法匯出：電腦資訊不完整。</string>
     <string name="export_launcher_app_details_incomplete">無法匯出：應用程式資訊不完整。</string>
+    <string name="help_ssl_error">此網站的憑證不受信任</string>
+    <string name="help_auth_username">使用者名稱</string>
+    <string name="help_auth_password">密碼</string>
+    <string name="help_auth_title">登入 %1$s</string>
 </resources>

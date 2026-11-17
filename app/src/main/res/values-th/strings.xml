@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">เซ็นเซอร์: </string>
     <string name="debug_info_no_relevant_driver">ไม่มี (ไม่มีไดรเวอร์ที่เกี่ยวข้องหรือไม่รองรับเกมแพด)</string>
     <string name="debug_info_vibration">การสั่น: </string>
+    <string name="debug_info_bt_hid_supported">รองรับผ่าน Bluetooth HID (%1$s)</string>
+    <string name="debug_info_android_details">รายละเอียดจาก Android (อาจไม่รวมการสั่นผ่าน Bluetooth HID): </string>
     <string name="debug_info_supported">รองรับ</string>
     <string name="debug_info_not_supported">ไม่รองรับ</string>
     <string name="debug_info_details">รายละเอียด: </string>
@@ -391,4 +393,8 @@
     <string name="save">บันทึก</string>
     <string name="export_launcher_computer_details_incomplete">ส่งออกไม่ได้: รายละเอียดคอมพิวเตอร์ไม่ครบ</string>
     <string name="export_launcher_app_details_incomplete">ส่งออกไม่ได้: รายละเอียดแอปไม่ครบ</string>
+    <string name="help_ssl_error">ใบรับรองของเว็บไซต์นี้ไม่น่าเชื่อถือ</string>
+    <string name="help_auth_username">ชื่อผู้ใช้</string>
+    <string name="help_auth_password">รหัสผ่าน</string>
+    <string name="help_auth_title">ลงชื่อเข้าใช้ %1$s</string>
 </resources>

@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">Sensörler: </string>
     <string name="debug_info_no_relevant_driver">Yok (uygun sürücü yok veya oyun kumandası desteklenmiyor)</string>
     <string name="debug_info_vibration">Titreşim: </string>
+    <string name="debug_info_bt_hid_supported">Bluetooth HID üzerinden destekleniyor (%1$s)</string>
+    <string name="debug_info_android_details">Android tarafından bildirilen ayrıntılar (Bluetooth HID titreşimi eksik olabilir): </string>
     <string name="debug_info_supported">Destekleniyor</string>
     <string name="debug_info_not_supported">Desteklenmiyor</string>
     <string name="debug_info_details">Ayrıntılar: </string>
@@ -391,4 +393,8 @@
     <string name="save">Kaydet</string>
     <string name="export_launcher_computer_details_incomplete">Dışa aktarılamıyor: bilgisayar bilgileri eksik.</string>
     <string name="export_launcher_app_details_incomplete">Dışa aktarılamıyor: uygulama bilgileri eksik.</string>
+    <string name="help_ssl_error">Bu sitenin sertifikası güvenilir değil</string>
+    <string name="help_auth_username">Kullanıcı adı</string>
+    <string name="help_auth_password">Parola</string>
+    <string name="help_auth_title">%1$s oturumu aç</string>
 </resources>

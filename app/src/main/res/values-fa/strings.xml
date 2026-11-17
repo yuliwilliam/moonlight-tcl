@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">حسگرها: </string>
     <string name="debug_info_no_relevant_driver">هیچ (درایور مرتبطی نیست یا دسته پشتیبانی نمی‌شود)</string>
     <string name="debug_info_vibration">لرزش: </string>
+    <string name="debug_info_bt_hid_supported">پشتیبانی از طریق Bluetooth HID (%1$s)</string>
+    <string name="debug_info_android_details">جزئیات گزارش‌شده توسط Android (ممکن است لرزش Bluetooth HID را نشان ندهد): </string>
     <string name="debug_info_supported">پشتیبانی می‌شود</string>
     <string name="debug_info_not_supported">پشتیبانی نمی‌شود</string>
     <string name="debug_info_details">جزئیات: </string>
@@ -391,4 +393,8 @@
     <string name="save">ذخیره</string>
     <string name="export_launcher_computer_details_incomplete">خروجی گرفتن ممکن نیست: اطلاعات رایانه ناقص است.</string>
     <string name="export_launcher_app_details_incomplete">خروجی گرفتن ممکن نیست: اطلاعات برنامه ناقص است.</string>
+    <string name="help_ssl_error">گواهی این سایت قابل اعتماد نیست</string>
+    <string name="help_auth_username">نام کاربری</string>
+    <string name="help_auth_password">گذرواژه</string>
+    <string name="help_auth_title">ورود به %1$s</string>
 </resources>

@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">Sensorer: </string>
     <string name="debug_info_no_relevant_driver">Ingen (ingen relevant driver, eller gamepaden understøttes ikke)</string>
     <string name="debug_info_vibration">Vibration: </string>
+    <string name="debug_info_bt_hid_supported">Understøttet via Bluetooth HID (%1$s)</string>
+    <string name="debug_info_android_details">Oplysninger fra Android (kan udelade vibration via Bluetooth HID): </string>
     <string name="debug_info_supported">Understøttet</string>
     <string name="debug_info_not_supported">Ikke understøttet</string>
     <string name="debug_info_details">Detaljer: </string>
@@ -391,4 +393,8 @@
     <string name="save">Gem</string>
     <string name="export_launcher_computer_details_incomplete">Kan ikke eksportere: computeroplysningerne er ufuldstændige.</string>
     <string name="export_launcher_app_details_incomplete">Kan ikke eksportere: appoplysningerne er ufuldstændige.</string>
+    <string name="help_ssl_error">Dette websteds certifikat er ikke tillidsværdigt</string>
+    <string name="help_auth_username">Brugernavn</string>
+    <string name="help_auth_password">Adgangskode</string>
+    <string name="help_auth_title">Log ind på %1$s</string>
 </resources>

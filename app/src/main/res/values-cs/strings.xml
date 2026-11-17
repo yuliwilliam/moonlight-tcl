@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">Senzory:</string>
     <string name="debug_info_no_relevant_driver">Žádný (chybí ovladač nebo gamepad není podporován)</string>
     <string name="debug_info_vibration">Vibrace:</string>
+    <string name="debug_info_bt_hid_supported">Podporováno přes Bluetooth HID (%1$s)</string>
+    <string name="debug_info_android_details">Údaje systému Android (nemusí zahrnovat vibrace přes Bluetooth HID):</string>
     <string name="debug_info_supported">Podporováno</string>
     <string name="debug_info_not_supported">Nepodporováno</string>
     <string name="debug_info_details">Podrobnosti:</string>
@@ -391,4 +393,8 @@
     <string name="save">Uložit</string>
     <string name="export_launcher_computer_details_incomplete">Nelze exportovat: údaje o počítači jsou neúplné.</string>
     <string name="export_launcher_app_details_incomplete">Nelze exportovat: údaje o aplikaci jsou neúplné.</string>
+    <string name="help_ssl_error">Certifikát tohoto webu není důvěryhodný</string>
+    <string name="help_auth_username">Uživatelské jméno</string>
+    <string name="help_auth_password">Heslo</string>
+    <string name="help_auth_title">Přihlášení k %1$s</string>
 </resources>

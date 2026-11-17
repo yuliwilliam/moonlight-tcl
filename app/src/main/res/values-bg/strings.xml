@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">Сензори:</string>
     <string name="debug_info_no_relevant_driver">Няма (няма драйвер или геймпадът не се поддържа)</string>
     <string name="debug_info_vibration">Вибрация:</string>
+    <string name="debug_info_bt_hid_supported">Поддържа се чрез Bluetooth HID (%1$s)</string>
+    <string name="debug_info_android_details">Данни от Android (може да не включват вибрацията през Bluetooth HID):</string>
     <string name="debug_info_supported">Поддържа се</string>
     <string name="debug_info_not_supported">Не се поддържа</string>
     <string name="debug_info_details">Подробности:</string>
@@ -391,4 +393,8 @@
     <string name="save">Запази</string>
     <string name="export_launcher_computer_details_incomplete">Не може да се експортира: данните за компютъра са непълни.</string>
     <string name="export_launcher_app_details_incomplete">Не може да се експортира: данните за приложението са непълни.</string>
+    <string name="help_ssl_error">Сертификатът на този сайт не е надежден</string>
+    <string name="help_auth_username">Потребителско име</string>
+    <string name="help_auth_password">Парола</string>
+    <string name="help_auth_title">Вход в %1$s</string>
 </resources>

@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">Αισθητήρες: </string>
     <string name="debug_info_no_relevant_driver">Κανένα (χωρίς κατάλληλο πρόγραμμα οδήγησης ή μη υποστηριζόμενο χειριστήριο)</string>
     <string name="debug_info_vibration">Δόνηση: </string>
+    <string name="debug_info_bt_hid_supported">Υποστηρίζεται μέσω Bluetooth HID (%1$s)</string>
+    <string name="debug_info_android_details">Στοιχεία Android (ενδέχεται να μην αναφέρουν δόνηση Bluetooth HID): </string>
     <string name="debug_info_supported">Υποστηρίζεται</string>
     <string name="debug_info_not_supported">Δεν υποστηρίζεται</string>
     <string name="debug_info_details">Λεπτομέρειες: </string>
@@ -391,4 +393,8 @@
     <string name="save">Αποθήκευση</string>
     <string name="export_launcher_computer_details_incomplete">Αδύνατη η εξαγωγή: τα στοιχεία του υπολογιστή είναι ελλιπή.</string>
     <string name="export_launcher_app_details_incomplete">Αδύνατη η εξαγωγή: τα στοιχεία της εφαρμογής είναι ελλιπή.</string>
+    <string name="help_ssl_error">Το πιστοποιητικό αυτού του ιστότοπου δεν είναι αξιόπιστο</string>
+    <string name="help_auth_username">Όνομα χρήστη</string>
+    <string name="help_auth_password">Κωδικός πρόσβασης</string>
+    <string name="help_auth_title">Σύνδεση στο %1$s</string>
 </resources>

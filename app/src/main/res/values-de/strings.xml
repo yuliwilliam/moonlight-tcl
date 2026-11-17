@@ -327,6 +327,8 @@
     <string name="debug_info_sensors">Sensoren: </string>
     <string name="debug_info_no_relevant_driver">Keiner (kein passender Treiber oder Gamepad nicht unterstützt)</string>
     <string name="debug_info_vibration">Vibration: </string>
+    <string name="debug_info_bt_hid_supported">Über Bluetooth HID unterstützt (%1$s)</string>
+    <string name="debug_info_android_details">Von Android gemeldete Details (ohne Vibration über Bluetooth HID möglich): </string>
     <string name="debug_info_supported">Unterstützt</string>
     <string name="debug_info_not_supported">Nicht unterstützt</string>
     <string name="debug_info_details">Details: </string>
@@ -391,4 +393,8 @@
     <string name="save">Speichern</string>
     <string name="export_launcher_computer_details_incomplete">Export nicht möglich: die Computerdaten sind unvollständig.</string>
     <string name="export_launcher_app_details_incomplete">Export nicht möglich: die App-Daten sind unvollständig.</string>
+    <string name="help_ssl_error">Das Zertifikat dieser Seite ist nicht vertrauenswürdig</string>
+    <string name="help_auth_username">Benutzername</string>
+    <string name="help_auth_password">Passwort</string>
+    <string name="help_auth_title">Bei %1$s anmelden</string>
 </resources>
