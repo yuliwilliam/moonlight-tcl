@@ -41,6 +41,7 @@ moonlight-stream/moonlight-common-c         official, 874ac95
 |---|---|
 | `a2430b92` | The in-app browser for the Sunshine/Apollo web UI (`HelpActivity`) accepted **any** certificate whose host matched the PC, so anyone on the LAN able to intercept traffic could capture the admin login typed into it. It now cancels every certificate error; open the web UI from the PC's own browser. The submodule URL points at yuliwilliam/moonlight-common-c. |
 | `e11a5adb` | `moonlight-tcl://` app links, so something outside the TV can open the app or start a stream — see below. |
+| `6daa3a20` | Runs on **Android 12 and later** (minSdk 31) instead of Android 14 only, for the TCL S551G (Realtek, Android 12): newer APIs are behind version checks again and mDNS uses jmDNS before Android 14, as in Artemis. The original README below still says Android 14 only. |
 
 ### App links (`moonlight-tcl://`)
 
