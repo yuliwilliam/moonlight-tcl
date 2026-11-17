@@ -103,7 +103,8 @@ public class HelpActivity extends Activity {
 
             // Sunshine and Apollo serve their web UI with the same self-signed certificate they pair with:
             // accept exactly that certificate for the PC we were sent to. A PC that isn't paired yet has no
-            // certificate on record, so there the host alone decides (the web UI is where its PIN is typed).
+            // certificate on record, so its web UI isn't opened here: a LAN attacker could present any certificate
+            // and capture the admin login. Pair from the PC's own browser instead.
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
                 String host = Uri.parse(error.getUrl()).getHost();
@@ -154,7 +155,7 @@ public class HelpActivity extends Activity {
 
     private boolean isPairedCertificate(SslError error) {
         if (trustedCert == null) {
-            return true;
+            return false;
         }
         X509Certificate cert = error.getCertificate().getX509Certificate();
         try {
