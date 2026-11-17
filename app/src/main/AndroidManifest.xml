@@ -10,6 +10,10 @@
     <!-- Dictation on the on-screen keyboard (OnScreenKeyboardView / VoiceInput), asked for on first use -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- jmDNS needs a MulticastLock before Android 14; NsdManager is used from 14 on -->
+    <uses-permission
+        android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE"
+        android:maxSdkVersion="33" />
     <!-- Gamepad rumble through the Bluetooth stack's HID host (BluetoothHidRumble) -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
     <!-- Legacy normal permission: Android 14 InputManagerService demands it for InputDevice.getBluetoothAddress() -->

@@ -247,7 +247,9 @@ public class MainActivity extends Activity {
 
         setContentView(R.layout.activity_main);
         UiHelper.notifyNewRootView(this);
-        setShouldDockBigOverlays(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            setShouldDockBigOverlays(false);
+        }
 
         // Set default preferences if we've never been run
         SettingsScreen.applyDefaults(this);

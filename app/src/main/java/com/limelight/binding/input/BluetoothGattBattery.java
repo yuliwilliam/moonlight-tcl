@@ -9,6 +9,7 @@ import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothStatusCodes;
 import android.content.Context;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
@@ -244,7 +245,11 @@ public final class BluetoothGattBattery {
         g.setCharacteristicNotification(c, true);
         byte[] value = (c.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0
                 ? BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE : BluetoothGattDescriptor.ENABLE_INDICATION_VALUE;
-        return g.writeDescriptor(cccd, value) == BluetoothStatusCodes.SUCCESS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return g.writeDescriptor(cccd, value) == BluetoothStatusCodes.SUCCESS;
+        }
+        cccd.setValue(value);
+        return g.writeDescriptor(cccd);
     }
 
     private boolean startMtuRequest() {
@@ -387,6 +392,21 @@ public final class BluetoothGattBattery {
         public void onCharacteristicChanged(BluetoothGatt g, BluetoothGattCharacteristic c, byte[] value) {
             if (BATTERY_LEVEL.equals(c.getUuid())) {
                 deliver(value);
+            }
+        }
+
+        // Before Android 13 the stack only calls these overloads, with the value left on the characteristic
+        @Override
+        public void onCharacteristicRead(BluetoothGatt g, BluetoothGattCharacteristic c, int status) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                onCharacteristicRead(g, c, c.getValue(), status);
+            }
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt g, BluetoothGattCharacteristic c) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                onCharacteristicChanged(g, c, c.getValue());
             }
         }
     };

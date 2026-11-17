@@ -42,12 +42,14 @@ public class HelpActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        onBackInvokedCallback = new OnBackInvokedCallback() {
-            @Override
-            public void onBackInvoked() {
-                goBackOrClose();
-            }
-        };
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedCallback = new OnBackInvokedCallback() {
+                @Override
+                public void onBackInvoked() {
+                    goBackOrClose();
+                }
+            };
+        }
 
         webView = new WebView(this);
         setContentView(webView);
@@ -171,8 +173,9 @@ public class HelpActivity extends Activity {
     }
 
     private void refreshBackDispatchState() {
-        // Always ours: the decision whether to step back or close is made in goBackOrClose()
-        if (!backCallbackRegistered) {
+        // Always ours: the decision whether to step back or close is made in goBackOrClose().
+        // Before Android 13 there is no dispatcher and onBackPressed() handles it.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !backCallbackRegistered) {
             getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
                     OnBackInvokedDispatcher.PRIORITY_DEFAULT, onBackInvokedCallback);
             backCallbackRegistered = true;
@@ -181,7 +184,7 @@ public class HelpActivity extends Activity {
 
     @Override
     protected void onDestroy() {
-        if (backCallbackRegistered) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && backCallbackRegistered) {
             getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackInvokedCallback);
         }
 
@@ -190,6 +193,7 @@ public class HelpActivity extends Activity {
 
     @Override
     // NOTE: This will NOT be called on Android 13+ with android:enableOnBackInvokedCallback="true"
+    @SuppressWarnings("deprecation")
     public void onBackPressed() {
         goBackOrClose();
     }

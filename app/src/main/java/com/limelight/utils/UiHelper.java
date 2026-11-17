@@ -38,6 +38,11 @@ public class UiHelper {
     private static final int TV_HORIZONTAL_PADDING_DP = 15;
 
     private static void setGameModeStatus(Context context, boolean streaming, boolean interruptible) {
+        // GameManager.setGameState() is Android 13+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            return;
+        }
+
         GameManager gameManager = context.getSystemService(GameManager.class);
 
         if (gameManager == null) {

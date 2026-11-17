@@ -107,12 +107,18 @@ static int openStreamLocked(void) {
     AAudioStreamBuilder_setDirection(builder, AAUDIO_DIRECTION_OUTPUT);
     AAudioStreamBuilder_setFormat(builder, AAUDIO_FORMAT_PCM_I16);
     AAudioStreamBuilder_setSampleRate(builder, sampleRate);
-    switch (channels) {
-        case 2: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_STEREO); break;
-        case 4: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_QUAD); break;
-        case 6: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_5POINT1); break;
-        case 8: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_7POINT1); break;
-        default: AAudioStreamBuilder_setChannelCount(builder, channels); break;
+    if (__builtin_available(android 32, *)) {
+        switch (channels) {
+            case 2: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_STEREO); break;
+            case 4: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_QUAD); break;
+            case 6: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_5POINT1); break;
+            case 8: AAudioStreamBuilder_setChannelMask(builder, AAUDIO_CHANNEL_7POINT1); break;
+            default: AAudioStreamBuilder_setChannelCount(builder, channels); break;
+        }
+    }
+    else {
+        // Channel masks are Android 12L+; older releases take a count in the default layout
+        AAudioStreamBuilder_setChannelCount(builder, channels);
     }
     // Exclusive MMAP is not available over HDMI on TVs and would steal the device from everything else
     AAudioStreamBuilder_setSharingMode(builder, AAUDIO_SHARING_MODE_SHARED);

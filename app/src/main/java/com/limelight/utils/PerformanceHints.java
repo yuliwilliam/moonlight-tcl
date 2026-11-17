@@ -1,6 +1,7 @@
 package com.limelight.utils;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.PerformanceHintManager;
 
 import com.limelight.LimeLog;
@@ -71,8 +72,17 @@ public final class PerformanceHints implements AutoCloseable {
                     LimeLog.info("ADPF: createHintSession returned null (HAL declined); hints disabled");
                     return;
                 }
-            } else {
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                 session.setThreads(all);
+            } else {
+                // Session.setThreads() is Android 14+; before that the thread set is fixed at creation
+                session.close();
+                session = manager.createHintSession(all, targetNs);
+                if (session == null) {
+                    declined = true;
+                    LimeLog.info("ADPF: createHintSession returned null (HAL declined); hints disabled");
+                    return;
+                }
             }
             LimeLog.info("ADPF: hint session threads=" + tids + " target=" + (targetNs / 1000) + " us, preferred update rate "
                     + (preferredRateNs / 1000) + " us");

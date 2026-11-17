@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.SystemClock;
 import android.view.InputDevice;
 
@@ -687,7 +688,9 @@ public final class BluetoothHidRumble {
                 return;
             }
             ReportListener listener = reportListener;
-            BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice.class);
+            BluetoothDevice device = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                    ? intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE, BluetoothDevice.class)
+                    : intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
             byte[] report = intent.getByteArrayExtra(EXTRA_REPORT);
             if (listener == null || device == null || report == null) {
                 return;

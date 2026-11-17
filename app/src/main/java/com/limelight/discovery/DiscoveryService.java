@@ -5,6 +5,7 @@ import java.util.List;
 import com.limelight.nvstream.mdns.MdnsComputer;
 import com.limelight.nvstream.mdns.MdnsDiscoveryAgent;
 import com.limelight.nvstream.mdns.MdnsDiscoveryListener;
+import com.limelight.nvstream.mdns.JmDNSDiscoveryAgent;
 import com.limelight.nvstream.mdns.NsdManagerDiscoveryAgent;
 
 import android.app.Service;
@@ -54,9 +55,14 @@ public class DiscoveryService extends Service {
             }
         };
 
-        // Android 14+ only: NsdManager has everything we need (multiple addresses per service) and
-        // works where mDNS proxying is required, so the jmDNS agent is gone.
-        discoveryAgent = new NsdManagerDiscoveryAgent(getApplicationContext(), listener);
+        // NsdManager only has everything we need (multiple addresses per service) from Android 14,
+        // so older releases use the jmDNS agent.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            discoveryAgent = new JmDNSDiscoveryAgent(getApplicationContext(), listener);
+        }
+        else {
+            discoveryAgent = new NsdManagerDiscoveryAgent(getApplicationContext(), listener);
+        }
     }
 
     private final DiscoveryBinder binder = new DiscoveryBinder();

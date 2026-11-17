@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         // Android 14 only: this build targets TCL C8K-class MediaTek TVs on their Android 14 firmware.
-        minSdk 34
+        minSdk 31
         targetSdk 34
 
         applicationId "com.limelight"
@@ -160,6 +160,8 @@ dependencies {
     // pairing uses javax.crypto. No Gson: profiles and shortcut files go through org.json. No AndroidX:
     // every screen is built on framework widgets (Activity, ListView, GridView, AlertDialog) and own Views.
     implementation 'org.jcodec:jcodec:0.2.5'
+    // mDNS discovery before Android 14 (JmDNSDiscoveryAgent); NsdManager is used from 14 on
+    implementation 'org.jmdns:jmdns:3.6.2'
     // Reaches the hidden BluetoothHidHost API for gamepad rumble over the Bluetooth stack (BluetoothHidRumble)
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1'
 

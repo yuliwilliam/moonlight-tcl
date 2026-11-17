@@ -166,7 +166,7 @@ public class NvConnection {
 
                 for (RouteInfo route : linkProperties.getRoutes()) {
                     // Skip non-unicast routes (which are all we get prior to Android 13)
-                    if (route.getType() != RouteInfo.RTN_UNICAST) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && route.getType() != RouteInfo.RTN_UNICAST) {
                         continue;
                     }
 
